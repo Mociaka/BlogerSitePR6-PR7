@@ -4,6 +4,8 @@ from django.utils import timezone
 from django.contrib.auth.models import User
 from django.urls import reverse
 from django.core.paginator import Paginator
+from taggit.managers import TaggableManager
+
 
 class Post(models.Model):
     class PublishedManager(models.Manager):
@@ -51,6 +53,8 @@ class Post(models.Model):
 
         return render(request, 'blog/post/list.html', {'posts': posts})
 
+    tags = TaggableManager()
+
 class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
     name = models.CharField(max_length=80)
@@ -65,6 +69,7 @@ class Comment(models.Model):
         indexes = [models.Index(fields=['created'])]
     def __str__(self):
         return f'Comment by {self.name} on {self.post}'
+
 
 
 
